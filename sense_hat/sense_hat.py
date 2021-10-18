@@ -68,9 +68,9 @@ class SenseHat(object):
         }
 
         self._rotation = 0
-        if lock:
-            self.SENSE_HAT_FB_LOCK_FILE.touch(exist_ok=False)
         self.lock = lock
+        if self.lock:
+            self.SENSE_HAT_FB_LOCK_FILE.touch(exist_ok=False)
 
         # Load text assets
         dir_path = os.path.dirname(__file__)
