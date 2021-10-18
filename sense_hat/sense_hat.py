@@ -13,6 +13,7 @@ import array
 import fcntl
 from PIL import Image  # pillow
 from copy import deepcopy
+from pathlib import Path
 
 from .stick import SenseStick
 from .colour import ColourSensor
@@ -26,12 +27,14 @@ class SenseHat(object):
     SENSE_HAT_FB_GAMMA_DEFAULT = 0
     SENSE_HAT_FB_GAMMA_LOW = 1
     SENSE_HAT_FB_GAMMA_USER = 2
+    SENSE_HAT_FB_LOCK_FILE = Path('/tmp/sense_hat.lock')
     SETTINGS_HOME_PATH = '.config/sense_hat'
 
     def __init__(
             self,
             imu_settings_file='RTIMULib',
-            text_assets='sense_hat_text'
+            text_assets='sense_hat_text',
+            lock=False
         ):
 
         self._fb_device = self._get_fb_device()
@@ -65,6 +68,9 @@ class SenseHat(object):
         }
 
         self._rotation = 0
+        if lock:
+            self.SENSE_HAT_FB_LOCK_FILE.touch(exist_ok=False)
+        self.lock = lock
 
         # Load text assets
         dir_path = os.path.dirname(__file__)
@@ -96,6 +102,10 @@ class SenseHat(object):
             self._colour = ColourSensor()
         except:
             pass
+
+    def __del__(self):
+        if self.lock and self.SENSE_HAT_FB_LOCK_FILE.exists():
+            self.SENSE_HAT_FB_LOCK_FILE.unlink()
 
     ####
     # Text assets
@@ -314,6 +324,10 @@ class SenseHat(object):
                 if element > 255 or element < 0:
                     raise ValueError('Pixel at index %d is invalid. Pixel elements must be between 0 and 255' % index)
 
+        # do nothing if another SenseHat object has locked the LED Matrix
+        if not self.lock and self.SENSE_HAT_FB_LOCK_FILE.exists():
+            return
+
         with open(self._fb_device, 'wb') as f:
             map = self._pix_map[self._rotation]
             for index, pix in enumerate(pixel_list):
@@ -368,6 +382,10 @@ class SenseHat(object):
         for element in pixel:
             if element > 255 or element < 0:
                 raise ValueError('Pixel elements must be between 0 and 255')
+
+        # do nothing if another SenseHat object has locked the LED Matrix
+        if not self.lock and self.SENSE_HAT_FB_LOCK_FILE.exists():
+            return
 
         with open(self._fb_device, 'wb') as f:
             map = self._pix_map[self._rotation]
