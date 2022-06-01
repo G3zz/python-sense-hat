@@ -16,6 +16,7 @@ from copy import deepcopy
 
 from .stick import SenseStick
 from .colour import ColourSensor
+from .exceptions import ColourSensorInitialisationError
 
 class SenseHat(object):
 
@@ -206,7 +207,9 @@ class SenseHat(object):
         try:
             return self._colour
         except AttributeError as e:
-            raise RuntimeError('This Sense HAT does not have a color sensor') from e
+            raise ColourSensorInitialisationError(
+                explanation="This Sense HAT" +
+                            " does not have a color sensor") from e
 
     color = colour
 
