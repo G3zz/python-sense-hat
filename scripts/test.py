@@ -1,4 +1,5 @@
 from sense_hat import SenseHat
+from sense_hat.exceptions import InvalidGainError, InvalidIntegrationCyclesError
 from time import sleep, time
 import logging 
 
@@ -40,14 +41,14 @@ for g in gain:
     
 
 invalid_gain = (2, 8, 32)
-logger.info("Testing setting an invalid gain... expecting a ValueError.")
+logger.info("Testing setting an invalid gain... expecting a InvalidGainError.")
 for g in invalid_gain:
     try:
         sense.color.gain = g
         logger.info(f"Gain: {g}")
         measure(SECONDS_PER_TEST)
-    except ValueError as e:
-        logger.info(f"Received ValueError {e} as expected!")
+    except InvalidGainError as e:
+        logger.info(f"Received InvalidGainError {e} as expected!")
 
 
 sense.color.gain=1 # reset
@@ -67,7 +68,7 @@ for i in invalid:
     try:
         sense.color.integration_cycle = i
         measure(SECONDS_PER_TEST)
-    except Exception as e:
-        logger.info(f"Recevied {e}")
+    except InvalidIntegrationCyclesError as e:
+        logger.info(f"Received {e} as expected")
 
 logger.info("Tests completed")

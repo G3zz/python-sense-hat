@@ -1,4 +1,5 @@
 #!/usr/bin/python
+import logging
 import struct
 import os
 import sys
@@ -95,7 +96,8 @@ class SenseHat(object):
         # initialise the TCS34725 colour sensor (if possible)
         try:
             self._colour = ColourSensor()
-        except:
+        except Exception as e:
+            logging.warning(e)
             pass
 
     ####
