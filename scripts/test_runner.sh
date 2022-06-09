@@ -2,4 +2,4 @@
 
 arch
 uname -a
-python test.py
+python3 test.py
