@@ -10,5 +10,5 @@ Please create a new pull request for each change recommendation.
 
 ## Policy
 
-- Python 2/3 compatability
+- Python 3 compatability
 - PEP8-compliance (with exceptions)

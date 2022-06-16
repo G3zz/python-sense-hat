@@ -1,5 +1,10 @@
 # Sense HAT Changelog
 
+## v3
+
+### 3.0.0
+- Remove support for Python 2
+
 ## v2
 
 ### 2.2.0
