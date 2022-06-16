@@ -7,7 +7,7 @@ def read(fname):
 
 setup(
     name="sense-hat",
-    version="2.2.0",
+    version="3.0.0",
     author="Dave Honess",
     author_email="dave@raspberrypi.org",
     description="Python module to control the Raspberry Pi Sense HAT used in the Astro Pi mission",
@@ -28,6 +28,8 @@ setup(
     install_requires=[
         "pillow",
         "numpy"
+        "RTMULib", # custom
+        "smbus"
     ],
     classifiers=[
         "Development Status :: 5 - Production/Stable",
@@ -38,5 +40,6 @@ setup(
         "Intended Audience :: Education",
         "Intended Audience :: Science/Research",
         "License :: OSI Approved :: BSD License",
+        "Operating System :: POSIX :: Linux"
     ],
 )
